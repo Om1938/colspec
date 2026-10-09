@@ -28,5 +28,24 @@
     "./package.json": "./package.json",
     "./contract.schema.json": "./dist/contract.schema.json"
   },
-  "description": "Contract schema, validation, registries. No framework dependencies."
+  "description": "JSON contract schema, validation and function registries for dynamic TanStack Table definitions.",
+  "author": "Om Prakash Das",
+  "homepage": "https://github.com/Om1938/colspec/tree/main/packages/core#readme",
+  "bugs": {
+    "url": "https://github.com/Om1938/colspec/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Om1938/colspec.git",
+    "directory": "packages/core"
+  },
+  "keywords": [
+    "tanstack-table",
+    "tanstack",
+    "table",
+    "datagrid",
+    "dynamic-columns",
+    "colspec",
+    "json-schema zod validation"
+  ]
 }

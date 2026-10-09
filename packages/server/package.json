@@ -27,5 +27,24 @@
     ".": "./dist/index.mjs",
     "./package.json": "./package.json"
   },
-  "description": "Storage interface, draft/publish lifecycle, HTTP helper."
+  "description": "Store, version, publish and serve colspec table definitions from any database or Node.js framework.",
+  "author": "Om Prakash Das",
+  "homepage": "https://github.com/Om1938/colspec/tree/main/packages/server#readme",
+  "bugs": {
+    "url": "https://github.com/Om1938/colspec/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Om1938/colspec.git",
+    "directory": "packages/server"
+  },
+  "keywords": [
+    "tanstack-table",
+    "tanstack",
+    "table",
+    "datagrid",
+    "dynamic-columns",
+    "colspec",
+    "backend persistence mongodb postgresql"
+  ]
 }

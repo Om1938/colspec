@@ -31,5 +31,24 @@
     ".": "./dist/index.mjs",
     "./package.json": "./package.json"
   },
-  "description": "Contract to TanStack column definitions and table options."
+  "description": "Hydrate colspec JSON contracts into native TanStack Table v9 column definitions and table options.",
+  "author": "Om Prakash Das",
+  "homepage": "https://github.com/Om1938/colspec/tree/main/packages/tanstack#readme",
+  "bugs": {
+    "url": "https://github.com/Om1938/colspec/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Om1938/colspec.git",
+    "directory": "packages/tanstack"
+  },
+  "keywords": [
+    "tanstack-table",
+    "tanstack",
+    "table",
+    "datagrid",
+    "dynamic-columns",
+    "colspec",
+    "column-def hydration"
+  ]
 }

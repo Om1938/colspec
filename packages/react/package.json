@@ -35,5 +35,24 @@
     ".": "./dist/index.mjs",
     "./package.json": "./package.json"
   },
-  "description": "`ColspecProvider`, `useContractTable`, `useHydratedContract`."
+  "description": "React provider and hooks for building TanStack Table instances from colspec JSON contracts.",
+  "author": "Om Prakash Das",
+  "homepage": "https://github.com/Om1938/colspec/tree/main/packages/react#readme",
+  "bugs": {
+    "url": "https://github.com/Om1938/colspec/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Om1938/colspec.git",
+    "directory": "packages/react"
+  },
+  "keywords": [
+    "tanstack-table",
+    "tanstack",
+    "table",
+    "datagrid",
+    "dynamic-columns",
+    "colspec",
+    "react hooks react-table"
+  ]
 }
