@@ -17,3 +17,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm turbo run lint check-types test build
+      - run: pnpm test:coverage
+      - uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/core/coverage/lcov.info,packages/tanstack/coverage/lcov.info,packages/react/coverage/lcov.info,packages/server/coverage/lcov.info
