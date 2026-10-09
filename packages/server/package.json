@@ -1,6 +1,6 @@
 {
   "name": "@colspec/server",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*"
