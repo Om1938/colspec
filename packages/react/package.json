@@ -1,0 +1,39 @@
+{
+  "name": "@colspec/react",
+  "version": "0.0.0",
+  "peerDependencies": {
+    "@tanstack/react-table": "^9.2.6",
+    "react": "^19.3.0"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "build": "tsdown",
+    "test": "vitest run",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@colspec/core": "workspace:*",
+    "@colspec/tanstack": "workspace:*"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@tanstack/react-table": "^9.2.6",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "description": "`ColspecProvider`, `useContractTable`, `useHydratedContract`."
+}

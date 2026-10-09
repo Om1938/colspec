@@ -1,0 +1,32 @@
+{
+  "name": "@colspec/core",
+  "version": "0.0.0",
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "build": "tsdown && tsx scripts/json-schema.ts",
+    "test": "vitest run",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  },
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json",
+    "./contract.schema.json": "./dist/contract.schema.json"
+  },
+  "description": "Contract schema, validation, registries. No framework dependencies."
+}

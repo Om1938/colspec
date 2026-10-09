@@ -1,0 +1,35 @@
+{
+  "name": "@colspec/tanstack",
+  "version": "0.0.0",
+  "peerDependencies": {
+    "@tanstack/table-core": "^9.2.6"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "build": "tsdown",
+    "test": "vitest run",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@colspec/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@tanstack/table-core": "^9.2.6"
+  },
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "description": "Contract to TanStack column definitions and table options."
+}

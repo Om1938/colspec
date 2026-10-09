@@ -1,0 +1,31 @@
+{
+  "name": "@colspec/server",
+  "version": "0.0.0",
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "build": "tsdown",
+    "test": "vitest run",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@colspec/core": "workspace:*"
+  },
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "description": "Storage interface, draft/publish lifecycle, HTTP helper."
+}
