@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { toServerQuery, validateContract, type TableContract } from "../src";
-import { contactsWith } from "./fixtures";
+import { productsWith } from "./fixtures";
 
 const contract = (mode: Record<string, string>): TableContract => {
-  const result = validateContract(contactsWith({ mode }));
+  const result = validateContract(productsWith({ mode }));
   if (!result.ok) throw new Error("fixture is invalid");
   return result.value;
 };
@@ -27,7 +27,7 @@ describe("toServerQuery", () => {
     };
     expect(toServerQuery(contract(server), state)).toEqual({
       sort: [
-        { key: "contact.created_at", desc: true },
+        { key: "product.created_at", desc: true },
         { key: "name", desc: false },
       ],
       filters: [{ key: "status", value: "active" }],

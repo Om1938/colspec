@@ -1,19 +1,19 @@
 /**
- * The contacts table as stored in MongoDB. Everything runs on the server, so
+ * The products table as stored in MongoDB. Everything runs on the server, so
  * the browser only ever holds one page of rows.
  */
-export const CONTACTS_TABLE_ID = 'crm.contacts';
+export const PRODUCTS_TABLE_ID = 'inventory.products';
 
-export const contactsContract = {
+export const productsContract = {
   schemaVersion: '1.0',
-  tableId: CONTACTS_TABLE_ID,
+  tableId: PRODUCTS_TABLE_ID,
   revision: 1,
   columns: [
-    { id: 'name', accessorKey: 'name', header: 'Contact Name', size: 220 },
+    { id: 'name', accessorKey: 'name', header: 'Product Name', size: 220 },
     {
-      id: 'fullName',
-      header: 'Full Name',
-      accessorFn: { ref: 'crm.fullName' },
+      id: 'brandModel',
+      header: 'Brand / Model',
+      accessorFn: { ref: 'inventory.brandModel' },
       // Computed in the browser, so the server cannot sort or filter by it.
       enableSorting: false,
       enableColumnFilter: false,
@@ -22,7 +22,7 @@ export const contactsContract = {
       id: 'status',
       accessorKey: 'status',
       header: 'Status',
-      cell: { ref: 'crm.statusBadge' },
+      cell: { ref: 'inventory.statusBadge' },
       // Plain JSON the front end reads to render a select instead of a text box.
       meta: { filterOptions: ['active', 'inactive'] },
     },
@@ -30,9 +30,9 @@ export const contactsContract = {
       id: 'createdAt',
       accessorKey: 'createdAt',
       header: 'Created',
-      formatter: { ref: 'crm.date' },
+      formatter: { ref: 'inventory.date' },
       enableColumnFilter: false,
-      server: { sortKey: 'contact.created_at' },
+      server: { sortKey: 'product.created_at' },
     },
   ],
   defaults: {

@@ -24,17 +24,19 @@ Contracts refer to functions by name. Register them once, at start-up.
 import { createTableRegistry } from "@colspec/tanstack";
 import { ColspecProvider } from "@colspec/react";
 
-const registry = createTableRegistry<Contact>({
-  accessorFns: { "crm.fullName": (row) => `${row.first} ${row.last}` },
+const registry = createTableRegistry<Product>({
+  accessorFns: { "inventory.brandModel": (row) => `${row.brand} ${row.model}` },
   cells: {
-    "crm.statusBadge": ({ getValue }) => <StatusBadge status={getValue()} />,
+    "inventory.statusBadge": ({ getValue }) => (
+      <StatusBadge status={getValue()} />
+    ),
   },
 });
 
 export function App() {
   return (
     <ColspecProvider registry={registry}>
-      <Contacts />
+      <Products />
     </ColspecProvider>
   );
 }
@@ -47,7 +49,7 @@ Fetching is yours. Validate whatever arrives before using it.
 ```ts
 import { validateContract } from "@colspec/core";
 
-const response = await fetch("/api/table-definitions/crm.contacts");
+const response = await fetch("/api/table-definitions/inventory.products");
 const result = validateContract(await response.json());
 if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
 const contract = result.value;
@@ -61,8 +63,8 @@ Hydration is memoized on its identity.
 ```tsx
 import { useContractTable } from "@colspec/react";
 
-function Contacts() {
-  const table = useContractTable<Contact>({ contract, data });
+function Products() {
+  const table = useContractTable<Product>({ contract, data });
 
   return (
     <table>

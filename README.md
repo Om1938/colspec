@@ -14,18 +14,20 @@ Targets TanStack Table v9.
 | [`@colspec/server`](packages/server)     | Storage interface, draft/publish lifecycle, HTTP helper.            |
 
 ```tsx
-const registry = createTableRegistry<Contact>({
+const registry = createTableRegistry<Product>({
   cells: {
-    "crm.statusBadge": ({ getValue }) => <StatusBadge status={getValue()} />,
+    "inventory.statusBadge": ({ getValue }) => (
+      <StatusBadge status={getValue()} />
+    ),
   },
 });
 
 const result = validateContract(
-  await (await fetch("/api/table-definitions/crm.contacts")).json(),
+  await (await fetch("/api/table-definitions/inventory.products")).json(),
 );
 
 // inside <ColspecProvider registry={registry}>
-const table = useContractTable<Contact>({ contract: result.value, data });
+const table = useContractTable<Product>({ contract: result.value, data });
 ```
 
 Documentation lives in [`apps/docs`](apps/docs/guide/getting-started.md).

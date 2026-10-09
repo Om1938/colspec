@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ContactsModule } from './contacts/contacts.module.js';
+import { ProductsModule } from './products/products.module.js';
 import { TableDefinitionsModule } from './table-definitions/table-definitions.module.js';
 
 @Module({
@@ -13,7 +13,7 @@ import { TableDefinitionsModule } from './table-definitions/table-definitions.mo
       }),
     }),
     TableDefinitionsModule,
-    ContactsModule,
+    ProductsModule,
   ],
 })
 export class AppModule {}

@@ -1,13 +1,13 @@
-/** The CRM contacts definition used as the reference fixture across packages. */
-export const contactsContract = {
+/** The products table definition used as the reference fixture across packages. */
+export const productsContract = {
   schemaVersion: "1.0",
-  tableId: "crm.contacts",
+  tableId: "inventory.products",
   revision: 4,
   columns: [
     {
       id: "name",
       accessorKey: "name",
-      header: "Contact Name",
+      header: "Product Name",
       enableSorting: true,
       sortFn: "alphanumeric",
       enableColumnFilter: true,
@@ -18,21 +18,21 @@ export const contactsContract = {
       id: "status",
       accessorKey: "status",
       header: "Status",
-      cell: { ref: "crm.statusBadge" },
+      cell: { ref: "inventory.statusBadge" },
       enableColumnFilter: true,
       filterFn: "equalsString",
     },
     {
-      id: "fullName",
-      header: "Full Name",
-      accessorFn: { ref: "crm.fullName" },
+      id: "brandModel",
+      header: "Brand / Model",
+      accessorFn: { ref: "inventory.brandModel" },
       enableSorting: true,
     },
     {
       id: "createdAt",
       accessorKey: "createdAt",
       enableSorting: true,
-      server: { sortKey: "contact.created_at" },
+      server: { sortKey: "product.created_at" },
     },
   ],
   defaults: {
@@ -43,7 +43,7 @@ export const contactsContract = {
 };
 
 /** A copy of the fixture with top-level fields replaced. */
-export const contactsWith = (overrides: Record<string, unknown>) => ({
-  ...contactsContract,
+export const productsWith = (overrides: Record<string, unknown>) => ({
+  ...productsContract,
   ...overrides,
 });

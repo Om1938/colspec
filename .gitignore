@@ -40,3 +40,6 @@ yarn-error.log*
 # Docs
 .vitepress/dist
 .vitepress/cache
+
+# TypeScript build info
+*.tsbuildinfo

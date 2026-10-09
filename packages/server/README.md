@@ -33,9 +33,9 @@ import { createTableDefinitionService } from "@colspec/server";
 const definitions = createTableDefinitionService(repository);
 
 await definitions.saveDraft(json); // validates; throws ContractError if invalid
-await definitions.publish("crm.contacts", 4);
-await definitions.getPublished("crm.contacts"); // latest published revision
-await definitions.listRevisions("crm.contacts");
+await definitions.publish("inventory.products", 4);
+await definitions.getPublished("inventory.products"); // latest published revision
+await definitions.listRevisions("inventory.products");
 ```
 
 Drafts can be saved repeatedly. A published revision is immutable; change a
@@ -65,8 +65,8 @@ you control.
 import { resolveServerQuery } from "@colspec/server";
 
 const result = resolveServerQuery(untrustedJson, {
-  "contact.created_at": "contacts.created_at",
-  status: "contacts.status",
+  "product.created_at": "products.created_at",
+  status: "products.status",
 });
 
 if (!result.ok) return badRequest(result.diagnostics);

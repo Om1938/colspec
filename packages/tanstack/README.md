@@ -15,11 +15,11 @@ Register the functions contracts may refer to, once:
 ```ts
 import { createTableRegistry } from "@colspec/tanstack";
 
-const registry = createTableRegistry<Contact>({
-  accessorFns: { "crm.fullName": (row) => `${row.first} ${row.last}` },
-  cells: { "crm.statusBadge": ({ getValue }) => renderBadge(getValue()) },
+const registry = createTableRegistry<Product>({
+  accessorFns: { "inventory.brandModel": (row) => `${row.brand} ${row.model}` },
+  cells: { "inventory.statusBadge": ({ getValue }) => renderBadge(getValue()) },
   formatters: {
-    "crm.date": (value: string) => new Date(value).toLocaleDateString(),
+    "inventory.date": (value: string) => new Date(value).toLocaleDateString(),
   },
 });
 ```
@@ -29,7 +29,7 @@ Then hydrate a validated contract:
 ```ts
 import { hydrateContract } from "@colspec/tanstack";
 
-const result = hydrateContract<typeof features, Contact>(contract, registry);
+const result = hydrateContract<typeof features, Product>(contract, registry);
 
 if (result.ok) {
   const { columns, options } = result.value;
@@ -40,12 +40,12 @@ if (result.ok) {
 
 ## How names resolve
 
-| In the contract                        | Resolves to                               |
-| -------------------------------------- | ----------------------------------------- |
-| `"sortFn": "alphanumeric"`             | TanStack's built-in function of that name |
-| `"sortFn": "auto"`                     | Passed through; TanStack chooses          |
-| `"cell": { "ref": "crm.statusBadge" }` | Your registered function                  |
-| `"header": "Name"`                     | Literal text                              |
+| In the contract                              | Resolves to                               |
+| -------------------------------------------- | ----------------------------------------- |
+| `"sortFn": "alphanumeric"`                   | TanStack's built-in function of that name |
+| `"sortFn": "auto"`                           | Passed through; TanStack chooses          |
+| `"cell": { "ref": "inventory.statusBadge" }` | Your registered function                  |
+| `"header": "Name"`                           | Literal text                              |
 
 A name that can't be found produces a `missing-reference` or `unknown-builtin`
 diagnostic. colspec never substitutes a different function, and never executes

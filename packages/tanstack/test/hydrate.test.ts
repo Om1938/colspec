@@ -2,38 +2,38 @@ import { validateContract, type TableContract } from "@colspec/core";
 import { constructTable, sortFns } from "@tanstack/table-core";
 import { storeReactivityBindings } from "@tanstack/table-core/store-reactivity-bindings";
 import { describe, expect, it } from "vitest";
-import { contactsContract, contactsWith } from "../../core/test/fixtures";
+import { productsContract, productsWith } from "../../core/test/fixtures";
 import { createTableRegistry, defaultFeatures, hydrateContract } from "../src";
 
-interface Contact {
+interface Product {
   name: string;
   status: string;
-  first: string;
-  last: string;
+  brand: string;
+  model: string;
   createdAt: string;
 }
 
-const data: Contact[] = [
+const data: Product[] = [
   {
     name: "item 10",
     status: "active",
-    first: "Ada",
-    last: "Lovelace",
+    brand: "Acme",
+    model: "Lamp",
     createdAt: "2026-01-02",
   },
   {
     name: "item 2",
     status: "inactive",
-    first: "Alan",
-    last: "Turing",
+    brand: "Apex",
+    model: "Torch",
     createdAt: "2026-01-01",
   },
 ];
 
 const statusBadge = () => "badge";
-const registry = createTableRegistry<Contact>({
-  accessorFns: { "crm.fullName": (row) => `${row.first} ${row.last}` },
-  cells: { "crm.statusBadge": statusBadge },
+const registry = createTableRegistry<Product>({
+  accessorFns: { "inventory.brandModel": (row) => `${row.brand} ${row.model}` },
+  cells: { "inventory.statusBadge": statusBadge },
 });
 
 function parse(input: unknown): TableContract {
@@ -43,7 +43,7 @@ function parse(input: unknown): TableContract {
 }
 
 function hydrate(input: unknown, using = registry) {
-  const result = hydrateContract<typeof defaultFeatures, Contact>(
+  const result = hydrateContract<typeof defaultFeatures, Product>(
     parse(input),
     using,
   );
@@ -73,18 +73,18 @@ const names = (table: ReturnType<typeof tableFor>) =>
 
 describe("hydrateContract", () => {
   it("resolves built-ins by name and references from the registry", () => {
-    const [name, status, fullName, createdAt] =
-      hydrate(contactsContract).columns;
+    const [name, status, brandModel, createdAt] =
+      hydrate(productsContract).columns;
     expect(name).toMatchObject({
       id: "name",
-      header: "Contact Name",
+      header: "Product Name",
       size: 240,
     });
     expect(name).toHaveProperty("sortFn", sortFns.alphanumeric);
     expect(status).toHaveProperty("cell", statusBadge);
-    expect(fullName).toHaveProperty(
+    expect(brandModel).toHaveProperty(
       "accessorFn",
-      registry.accessorFns["crm.fullName"],
+      registry.accessorFns["inventory.brandModel"],
     );
     expect(createdAt).not.toHaveProperty("server");
     expect(createdAt).not.toHaveProperty("sortFn");
@@ -92,16 +92,16 @@ describe("hydrateContract", () => {
 
   it("drives a real table: default sorting uses the named sort function", () => {
     // alphanumeric orders "item 2" before "item 10"; a plain text sort would not.
-    expect(names(tableFor(contactsContract))).toEqual(["item 2", "item 10"]);
+    expect(names(tableFor(productsContract))).toEqual(["item 2", "item 10"]);
   });
 
   it("drives a real table: filtering and computed accessors", () => {
-    const table = tableFor(contactsContract, {
+    const table = tableFor(productsContract, {
       columnFilters: [{ id: "status", value: "active" }],
     });
     expect(names(table)).toEqual(["item 10"]);
-    expect(table.getRowModel().rows[0]?.getValue("fullName")).toBe(
-      "Ada Lovelace",
+    expect(table.getRowModel().rows[0]?.getValue("brandModel")).toBe(
+      "Acme Lamp",
     );
   });
 
@@ -111,13 +111,13 @@ describe("hydrateContract", () => {
       filtering: "server",
       pagination: "server",
     };
-    const { options } = hydrate(contactsWith({ mode: server }));
+    const { options } = hydrate(productsWith({ mode: server }));
     expect(options).toMatchObject({
       manualSorting: true,
       manualFiltering: true,
       manualPagination: true,
     });
-    expect(names(tableFor(contactsWith({ mode: server })))).toEqual([
+    expect(names(tableFor(productsWith({ mode: server })))).toEqual([
       "item 10",
       "item 2",
     ]);
@@ -125,7 +125,7 @@ describe("hydrateContract", () => {
 
   it("reports missing references instead of falling back", () => {
     const result = hydrateContract(
-      parse(contactsContract),
+      parse(productsContract),
       createTableRegistry(),
     );
     expect(result.ok).toBe(false);
@@ -138,7 +138,7 @@ describe("hydrateContract", () => {
   it("reports unknown built-in names", () => {
     const columns = [{ id: "a", accessorKey: "name", sortFn: "alphabetical" }];
     const result = hydrateContract(
-      parse(contactsWith({ columns, defaults: undefined })),
+      parse(productsWith({ columns, defaults: undefined })),
       registry,
     );
     expect(result.diagnostics).toMatchObject([
@@ -148,7 +148,7 @@ describe("hydrateContract", () => {
 
   it("applies formatters and exposes row actions through column meta", () => {
     const archive = () => "archived";
-    const custom = createTableRegistry<Contact>({
+    const custom = createTableRegistry<Product>({
       formatters: { upper: (value: string) => value.toUpperCase() },
       actions: { archive },
     });
@@ -162,22 +162,22 @@ describe("hydrateContract", () => {
       },
     ];
     const [column] = hydrate(
-      contactsWith({ columns, defaults: undefined }),
+      productsWith({ columns, defaults: undefined }),
       custom,
     ).columns;
     expect(column?.meta).toEqual({ align: "left", actions: { archive } });
     const cell = column?.cell as (context: {
       getValue: () => string;
     }) => unknown;
-    expect(cell({ getValue: () => "ada" })).toBe("ADA");
+    expect(cell({ getValue: () => "acme" })).toBe("ACME");
   });
 
   it("memoizes by contract and registry identity", () => {
-    const contract = parse(contactsContract);
+    const contract = parse(productsContract);
     expect(hydrateContract(contract, registry)).toBe(
       hydrateContract(contract, registry),
     );
-    expect(hydrateContract(parse(contactsContract), registry)).not.toBe(
+    expect(hydrateContract(parse(productsContract), registry)).not.toBe(
       hydrateContract(contract, registry),
     );
   });

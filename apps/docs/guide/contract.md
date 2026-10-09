@@ -7,13 +7,13 @@ is a named reference instead.
 ```json
 {
   "schemaVersion": "1.0",
-  "tableId": "crm.contacts",
+  "tableId": "inventory.products",
   "revision": 4,
   "columns": [
     {
       "id": "name",
       "accessorKey": "name",
-      "header": "Contact Name",
+      "header": "Product Name",
       "sortFn": "alphanumeric",
       "filterFn": "includesString",
       "size": 240
@@ -21,13 +21,13 @@ is a named reference instead.
     {
       "id": "status",
       "accessorKey": "status",
-      "cell": { "ref": "crm.statusBadge" },
+      "cell": { "ref": "inventory.statusBadge" },
       "filterFn": "equalsString"
     },
     {
-      "id": "fullName",
-      "header": "Full Name",
-      "accessorFn": { "ref": "crm.fullName" }
+      "id": "brandModel",
+      "header": "Brand / Model",
+      "accessorFn": { "ref": "inventory.brandModel" }
     }
   ],
   "defaults": {
@@ -44,11 +44,11 @@ v9 renamed `sortingFn` to `sortFn`. The contract follows v9.
 
 ## Names and references
 
-| Value                          | Meaning                                                            |
-| ------------------------------ | ------------------------------------------------------------------ |
-| `"alphanumeric"`               | A TanStack built-in, for `sortFn`, `filterFn` and `aggregationFn`. |
-| `"auto"`                       | Let TanStack choose from the column's data.                        |
-| `{ "ref": "crm.statusBadge" }` | A function your application registered.                            |
+| Value                                | Meaning                                                            |
+| ------------------------------------ | ------------------------------------------------------------------ |
+| `"alphanumeric"`                     | A TanStack built-in, for `sortFn`, `filterFn` and `aggregationFn`. |
+| `"auto"`                             | Let TanStack choose from the column's data.                        |
+| `{ "ref": "inventory.statusBadge" }` | A function your application registered.                            |
 
 `header` and `footer` accept literal text or a reference. `cell`, `accessorFn`
 and `formatter` accept references only.

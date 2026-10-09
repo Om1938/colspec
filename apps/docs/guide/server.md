@@ -42,10 +42,10 @@ import { createTableDefinitionService } from "@colspec/server";
 const definitions = createTableDefinitionService(repository);
 
 await definitions.saveDraft(json); // validates; throws ContractError if invalid
-await definitions.publish("crm.contacts", 4);
-await definitions.getPublished("crm.contacts"); // latest published
-await definitions.getPublished("crm.contacts", 3); // a specific revision
-await definitions.listRevisions("crm.contacts");
+await definitions.publish("inventory.products", 4);
+await definitions.getPublished("inventory.products"); // latest published
+await definitions.getPublished("inventory.products", 3); // a specific revision
+await definitions.listRevisions("inventory.products");
 ```
 
 Drafts can be saved repeatedly. Once published, a revision is immutable:

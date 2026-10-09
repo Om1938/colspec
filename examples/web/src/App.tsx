@@ -2,10 +2,10 @@ import type { TableContract } from '@colspec/core'
 import { ColspecProvider } from '@colspec/react'
 import { useEffect, useState } from 'react'
 import { fetchContract } from './api.ts'
-import { ContactsTable } from './ContactsTable.tsx'
+import { ProductsTable } from './ProductsTable.tsx'
 import { registry } from './registry.tsx'
 
-const TABLE_ID = 'crm.contacts'
+const TABLE_ID = 'inventory.products'
 
 export default function App() {
   const [contract, setContract] = useState<TableContract>()
@@ -17,7 +17,7 @@ export default function App() {
 
   return (
     <main>
-      <h1>Contacts</h1>
+      <h1>Products</h1>
       {error && <pre role="alert">{error}</pre>}
       {contract && (
         <>
@@ -26,7 +26,7 @@ export default function App() {
             from MongoDB.
           </p>
           <ColspecProvider registry={registry}>
-            <ContactsTable contract={contract} />
+            <ProductsTable contract={contract} />
           </ColspecProvider>
         </>
       )}

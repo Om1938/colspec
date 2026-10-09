@@ -25,7 +25,7 @@ operations that run on the server.
 import { toServerQuery } from "@colspec/core";
 
 const query = toServerQuery(contract, table.state);
-// { sort: [{ key: "contact.created_at", desc: true }], page: { index: 0, size: 25 } }
+// { sort: [{ key: "product.created_at", desc: true }], page: { index: 0, size: 25 } }
 ```
 
 Keys come from each column's `server.sortKey` or `server.filterKey`, falling
@@ -35,7 +35,7 @@ back to the column id.
 {
   "id": "createdAt",
   "accessorKey": "createdAt",
-  "server": { "sortKey": "contact.created_at" }
+  "server": { "sortKey": "product.created_at" }
 }
 ```
 
@@ -48,8 +48,8 @@ every key through a list you control before it reaches a query.
 import { resolveServerQuery } from "@colspec/server";
 
 const result = resolveServerQuery(query, {
-  "contact.created_at": "contacts.created_at",
-  status: "contacts.status",
+  "product.created_at": "products.created_at",
+  status: "products.status",
 });
 
 if (!result.ok) return badRequest(result.diagnostics); // unapproved-key

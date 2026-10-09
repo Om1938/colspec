@@ -2,15 +2,15 @@ import { describe, expect, it } from "vitest";
 import { resolveServerQuery } from "../src";
 
 const fields = {
-  "contact.created_at": "contacts.created_at",
-  status: "contacts.status",
+  "product.created_at": "products.created_at",
+  status: "products.status",
 };
 
 describe("resolveServerQuery", () => {
   it("maps approved keys to backend fields", () => {
     const result = resolveServerQuery(
       {
-        sort: [{ key: "contact.created_at", desc: true }],
+        sort: [{ key: "product.created_at", desc: true }],
         filters: [{ key: "status", value: "active" }],
         page: { index: 0, size: 25 },
       },
@@ -19,8 +19,8 @@ describe("resolveServerQuery", () => {
     expect(result).toMatchObject({
       ok: true,
       value: {
-        sort: [{ field: "contacts.created_at", desc: true }],
-        filters: [{ field: "contacts.status", value: "active" }],
+        sort: [{ field: "products.created_at", desc: true }],
+        filters: [{ field: "products.status", value: "active" }],
         page: { index: 0, size: 25 },
       },
     });
@@ -30,7 +30,7 @@ describe("resolveServerQuery", () => {
     const result = resolveServerQuery(
       {
         sort: [
-          { key: "1; DROP TABLE contacts", desc: false },
+          { key: "1; DROP TABLE products", desc: false },
           { key: "toString", desc: false },
         ],
       },

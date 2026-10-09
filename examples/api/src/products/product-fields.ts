@@ -1,11 +1,11 @@
 import type { QueryFilter } from 'mongoose';
-import type { Contact } from './contact.schema.js';
+import type { Product } from './product.schema.js';
 
 /** How one approved operation key may be used in a MongoDB query. */
-export interface ContactField {
-  path: keyof Contact;
+export interface ProductField {
+  path: keyof Product;
   /** Builds the filter from an untrusted value; absent if not filterable. */
-  filter?: (value: unknown) => QueryFilter<Contact>;
+  filter?: (value: unknown) => QueryFilter<Product>;
 }
 
 const escapeRegExp = (text: string) =>
@@ -16,7 +16,7 @@ const escapeRegExp = (text: string) =>
  * value to a string, so operator objects such as `{ "$ne": null }` cannot
  * reach the database.
  */
-export const CONTACT_FIELDS: Readonly<Record<string, ContactField>> = {
+export const PRODUCT_FIELDS: Readonly<Record<string, ProductField>> = {
   name: {
     path: 'name',
     filter: (value) => ({
@@ -25,7 +25,7 @@ export const CONTACT_FIELDS: Readonly<Record<string, ContactField>> = {
   },
   status: {
     path: 'status',
-    filter: (value) => ({ status: String(value) as Contact['status'] }),
+    filter: (value) => ({ status: String(value) as Product['status'] }),
   },
-  'contact.created_at': { path: 'createdAt' },
+  'product.created_at': { path: 'createdAt' },
 };

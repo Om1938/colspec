@@ -22,7 +22,7 @@ Let each module own its functions and compose them once.
 ```ts
 import { composeRegistries } from "@colspec/core";
 
-const registry = composeRegistries([crmRegistry, billingRegistry]);
+const registry = composeRegistries([inventoryRegistry, billingRegistry]);
 ```
 
 A name registered twice in the same category throws a

@@ -1,13 +1,13 @@
-/** A contact row as the API returns it. */
-export interface Contact {
+/** A product row as the API returns it. */
+export interface Product {
   name: string
-  first: string
-  last: string
+  brand: string
+  model: string
   status: 'active' | 'inactive'
   createdAt: string
 }
 
-export interface ContactPage {
-  rows: Contact[]
+export interface ProductPage {
+  rows: Product[]
   total: number
 }

@@ -1,5 +1,5 @@
 import { createTableRegistry } from '@colspec/tanstack'
-import type { Contact } from './types.ts'
+import type { Product } from './types.ts'
 
 const dateFormat = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeZone: 'UTC' })
 
@@ -7,17 +7,17 @@ const dateFormat = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeZone
  * Every function a contract may refer to. The database only stores the names;
  * the code lives here, in the deployed front end.
  */
-export const registry = createTableRegistry<Contact>({
+export const registry = createTableRegistry<Product>({
   accessorFns: {
-    'crm.fullName': (row) => `${row.first} ${row.last}`,
+    'inventory.brandModel': (row) => `${row.brand} ${row.model}`,
   },
   cells: {
-    'crm.statusBadge': ({ getValue }) => {
+    'inventory.statusBadge': ({ getValue }) => {
       const status = String(getValue())
       return <span className={`badge badge-${status}`}>{status}</span>
     },
   },
   formatters: {
-    'crm.date': (value: string) => dateFormat.format(new Date(value)),
+    'inventory.date': (value: string) => dateFormat.format(new Date(value)),
   },
 })

@@ -15,28 +15,30 @@ import { ColspecProvider, useContractTable } from "@colspec/react";
 import { createTableRegistry } from "@colspec/tanstack";
 
 // 1. Register the functions contracts may refer to. Do this once.
-const registry = createTableRegistry<Contact>({
-  cells: { "crm.statusBadge": ({ getValue }) => <Badge status={getValue()} /> },
+const registry = createTableRegistry<Product>({
+  cells: {
+    "inventory.statusBadge": ({ getValue }) => <Badge status={getValue()} />,
+  },
 });
 
 // 2. Provide the registry.
 export function App() {
   return (
     <ColspecProvider registry={registry}>
-      <Contacts />
+      <Products />
     </ColspecProvider>
   );
 }
 
 // 3. Build the table from a validated contract.
-function Contacts({
+function Products({
   contract,
   data,
 }: {
   contract: TableContract;
-  data: Contact[];
+  data: Product[];
 }) {
-  const table = useContractTable<Contact>({ contract, data });
+  const table = useContractTable<Product>({ contract, data });
 
   return (
     <table>

@@ -5,7 +5,7 @@ import request from 'supertest';
 import type { App } from 'supertest/types.js';
 import { AppModule } from '../src/app.module.js';
 import { configureApp } from '../src/configure-app.js';
-import { contactsContract } from '../src/contacts/contacts.contract.js';
+import { productsContract } from '../src/products/products.contract.js';
 
 // A database of its own, emptied before the run; needs `docker compose up -d`.
 const MONGODB_URI =
@@ -14,9 +14,9 @@ const MONGODB_URI =
 describe('example API (e2e)', () => {
   let app: INestApplication<App>;
   const http = () => request(app.getHttpServer());
-  const contacts = (query: unknown) =>
+  const products = (query: unknown) =>
     http()
-      .get('/api/contacts')
+      .get('/api/products')
       .query({ query: JSON.stringify(query) });
 
   beforeAll(async () => {
@@ -39,10 +39,10 @@ describe('example API (e2e)', () => {
   describe('table definitions', () => {
     it('serves the seeded contract from MongoDB with an ETag', async () => {
       const response = await http()
-        .get('/api/table-definitions/crm.contacts')
+        .get('/api/table-definitions/inventory.products')
         .expect(200);
       expect(response.body).toMatchObject({
-        tableId: 'crm.contacts',
+        tableId: 'inventory.products',
         revision: 1,
         mode: { pagination: 'server' },
       });
@@ -50,7 +50,7 @@ describe('example API (e2e)', () => {
       expect(response.body).not.toHaveProperty('_id');
 
       await http()
-        .get('/api/table-definitions/crm.contacts')
+        .get('/api/table-definitions/inventory.products')
         .set('If-None-Match', response.headers.etag)
         .expect(304);
     });
@@ -62,7 +62,7 @@ describe('example API (e2e)', () => {
       const response = await http()
         .post('/api/table-definitions')
         .send({
-          ...contactsContract,
+          ...productsContract,
           revision: 2,
           columns: [{ id: 'a', sortingFn: 'x' }],
         })
@@ -73,24 +73,26 @@ describe('example API (e2e)', () => {
     });
 
     it('publishes a new revision, which then replaces the served contract', async () => {
-      const draft = { ...contactsContract, revision: 2, meta: { note: 'v2' } };
+      const draft = { ...productsContract, revision: 2, meta: { note: 'v2' } };
       await http().post('/api/table-definitions').send(draft).expect(201);
 
       // Still a draft: consumers keep getting revision 1.
-      const before = await http().get('/api/table-definitions/crm.contacts');
+      const before = await http().get(
+        '/api/table-definitions/inventory.products',
+      );
       expect(before.body.revision).toBe(1);
 
       await http()
-        .post('/api/table-definitions/crm.contacts/revisions/2/publish')
+        .post('/api/table-definitions/inventory.products/revisions/2/publish')
         .expect(201);
       const after = await http()
-        .get('/api/table-definitions/crm.contacts')
+        .get('/api/table-definitions/inventory.products')
         .set('If-None-Match', before.headers.etag)
         .expect(200);
       expect(after.body).toMatchObject({ revision: 2, meta: { note: 'v2' } });
 
       const revisions = await http()
-        .get('/api/table-definitions/crm.contacts/revisions')
+        .get('/api/table-definitions/inventory.products/revisions')
         .expect(200);
       expect(revisions.body.map((r: { status: string }) => r.status)).toEqual([
         'published',
@@ -99,29 +101,29 @@ describe('example API (e2e)', () => {
     });
 
     it('refuses to change a published revision', () =>
-      http().post('/api/table-definitions').send(contactsContract).expect(409));
+      http().post('/api/table-definitions').send(productsContract).expect(409));
 
     it('returns 404 when publishing a revision that does not exist', () =>
       http()
-        .post('/api/table-definitions/crm.contacts/revisions/99/publish')
+        .post('/api/table-definitions/inventory.products/revisions/99/publish')
         .expect(404));
   });
 
-  describe('contacts', () => {
+  describe('products', () => {
     it('paginates on the server and reports the total', async () => {
-      const { body } = await contacts({ page: { index: 0, size: 10 } }).expect(
+      const { body } = await products({ page: { index: 0, size: 10 } }).expect(
         200,
       );
       expect(body.total).toBe(35);
       expect(body.rows).toHaveLength(10);
 
-      const last = await contacts({ page: { index: 3, size: 10 } }).expect(200);
+      const last = await products({ page: { index: 3, size: 10 } }).expect(200);
       expect(last.body.rows).toHaveLength(5);
     });
 
     it('sorts by an approved server key', async () => {
-      const { body } = await contacts({
-        sort: [{ key: 'contact.created_at', desc: true }],
+      const { body } = await products({
+        sort: [{ key: 'product.created_at', desc: true }],
         page: { index: 0, size: 3 },
       }).expect(200);
       expect(
@@ -134,38 +136,38 @@ describe('example API (e2e)', () => {
     });
 
     it('filters before paginating', async () => {
-      const { body } = await contacts({
+      const { body } = await products({
         filters: [
           { key: 'status', value: 'inactive' },
-          { key: 'name', value: 'love' },
+          { key: 'name', value: 'lamp' },
         ],
         sort: [{ key: 'name', desc: false }],
       }).expect(200);
       expect(body.total).toBe(3);
       expect(body.rows.map((row: { name: string }) => row.name)).toEqual([
-        'Lovelace, Ada',
-        'Lovelace, Barbara',
-        'Lovelace, Linus',
+        'Lamp, Acme',
+        'Lamp, Bolt',
+        'Lamp, Lumo',
       ]);
     });
 
     it('rejects keys that are not approved', async () => {
-      const { body } = await contacts({
+      const { body } = await products({
         sort: [{ key: 'passwordHash', desc: false }],
       }).expect(400);
       expect(body.diagnostics[0]).toMatchObject({ code: 'unapproved-key' });
     });
 
     it('treats operator objects as plain text, not as MongoDB operators', async () => {
-      const { body } = await contacts({
+      const { body } = await products({
         filters: [{ key: 'status', value: { $ne: 'active' } }],
       }).expect(200);
       expect(body.total).toBe(0);
     });
 
     it('rejects malformed queries', async () => {
-      await http().get('/api/contacts').query({ query: '{nope' }).expect(400);
-      await contacts({ page: { index: -1, size: 10 } }).expect(400);
+      await http().get('/api/products').query({ query: '{nope' }).expect(400);
+      await products({ page: { index: -1, size: 10 } }).expect(400);
     });
   });
 });

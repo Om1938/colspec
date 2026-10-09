@@ -1,6 +1,6 @@
 import { ContractError } from "@colspec/core";
 import { describe, expect, it } from "vitest";
-import { contactsContract, contactsWith } from "../../core/test/fixtures";
+import { productsContract, productsWith } from "../../core/test/fixtures";
 import {
   createMemoryRepository,
   createTableDefinitionService,
@@ -9,13 +9,13 @@ import {
   RevisionPublishedError,
 } from "../src";
 
-const TABLE = "crm.contacts";
+const TABLE = "inventory.products";
 const setup = () => createTableDefinitionService(createMemoryRepository());
 
 describe("table definition service", () => {
   it("keeps drafts private until they are published", async () => {
     const service = setup();
-    await service.saveDraft(contactsContract);
+    await service.saveDraft(productsContract);
     expect(await service.getPublished(TABLE)).toBeUndefined();
 
     await service.publish(TABLE, 4);
@@ -27,11 +27,11 @@ describe("table definition service", () => {
 
   it("lets a draft be revised but freezes a published revision", async () => {
     const service = setup();
-    await service.saveDraft(contactsContract);
-    await service.saveDraft(contactsWith({ meta: { note: "edited" } }));
+    await service.saveDraft(productsContract);
+    await service.saveDraft(productsWith({ meta: { note: "edited" } }));
     await service.publish(TABLE, 4);
 
-    await expect(service.saveDraft(contactsContract)).rejects.toThrow(
+    await expect(service.saveDraft(productsContract)).rejects.toThrow(
       RevisionPublishedError,
     );
     expect((await service.getPublished(TABLE))?.definition.meta).toEqual({
@@ -42,7 +42,7 @@ describe("table definition service", () => {
   it("serves the latest published revision and specific ones on request", async () => {
     const service = setup();
     for (const revision of [4, 5, 6])
-      await service.saveDraft(contactsWith({ revision }));
+      await service.saveDraft(productsWith({ revision }));
     await service.publish(TABLE, 4);
     await service.publish(TABLE, 5);
 
@@ -60,7 +60,7 @@ describe("table definition service", () => {
 
   it("rejects invalid definitions with diagnostics", async () => {
     await expect(
-      setup().saveDraft(contactsWith({ columns: [] })),
+      setup().saveDraft(productsWith({ columns: [] })),
     ).rejects.toThrow(ContractError);
   });
 
@@ -74,7 +74,7 @@ describe("table definition service", () => {
 describe("getDefinitionResponse", () => {
   it("returns the contract with an ETag, then 304 for a matching request", async () => {
     const service = setup();
-    await service.saveDraft(contactsContract);
+    await service.saveDraft(productsContract);
     await service.publish(TABLE, 4);
 
     const first = await getDefinitionResponse(service, { tableId: TABLE });
@@ -91,7 +91,7 @@ describe("getDefinitionResponse", () => {
       headers: first.headers,
     });
 
-    await service.saveDraft(contactsWith({ revision: 5 }));
+    await service.saveDraft(productsWith({ revision: 5 }));
     await service.publish(TABLE, 5);
     const next = await getDefinitionResponse(service, {
       tableId: TABLE,

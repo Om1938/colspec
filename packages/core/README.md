@@ -31,7 +31,7 @@ executable is a named reference.
 ```json
 {
   "schemaVersion": "1.0",
-  "tableId": "crm.contacts",
+  "tableId": "inventory.products",
   "revision": 4,
   "columns": [
     {
@@ -43,7 +43,7 @@ executable is a named reference.
     {
       "id": "status",
       "accessorKey": "status",
-      "cell": { "ref": "crm.statusBadge" }
+      "cell": { "ref": "inventory.statusBadge" }
     }
   ],
   "defaults": { "pagination": { "pageSize": 25 } },
@@ -60,7 +60,7 @@ your own checks with `validateContract(json, { rules })`.
 ```ts
 import { composeRegistries } from "@colspec/core";
 
-const registry = composeRegistries([crmRegistry, billingRegistry]);
+const registry = composeRegistries([inventoryRegistry, billingRegistry]);
 ```
 
 A name registered twice throws unless you pass `{ onCollision: "override" }`.
@@ -71,7 +71,7 @@ A name registered twice throws unless you pass `{ onCollision: "override" }`.
 import { toServerQuery } from "@colspec/core";
 
 toServerQuery(contract, { sorting, columnFilters, pagination });
-// { sort: [{ key: "contact.created_at", desc: true }], page: { index: 0, size: 25 } }
+// { sort: [{ key: "product.created_at", desc: true }], page: { index: 0, size: 25 } }
 ```
 
 Only the operations the contract runs on the server are included.

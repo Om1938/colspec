@@ -1,5 +1,5 @@
 import { ContractError, validateContract, type TableContract } from '@colspec/core'
-import type { ContactPage } from './types.ts'
+import type { ProductPage } from './types.ts'
 
 async function getJson(url: string): Promise<unknown> {
   const response = await fetch(url)
@@ -15,6 +15,6 @@ export async function fetchContract(tableId: string): Promise<TableContract> {
 }
 
 /** `query` is the serialized result of colspec's `toServerQuery`. */
-export async function fetchContacts(query: string): Promise<ContactPage> {
-  return (await getJson(`/api/contacts?${new URLSearchParams({ query })}`)) as ContactPage
+export async function fetchProducts(query: string): Promise<ProductPage> {
+  return (await getJson(`/api/products?${new URLSearchParams({ query })}`)) as ProductPage
 }

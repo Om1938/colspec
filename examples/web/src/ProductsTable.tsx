@@ -3,14 +3,14 @@ import { useContractTable } from '@colspec/react'
 import type { DefaultFeatures } from '@colspec/tanstack'
 import type { Column } from '@tanstack/react-table'
 import { useEffect, useState } from 'react'
-import { fetchContacts } from './api.ts'
-import type { Contact, ContactPage } from './types.ts'
+import { fetchProducts } from './api.ts'
+import type { Product, ProductPage } from './types.ts'
 
-const EMPTY_PAGE: ContactPage = { rows: [], total: 0 }
+const EMPTY_PAGE: ProductPage = { rows: [], total: 0 }
 const SORT_INDICATOR = { asc: ' ▲', desc: ' ▼' } as const
 
 interface FilterProps {
-  column: Column<DefaultFeatures, Contact>
+  column: Column<DefaultFeatures, Product>
   onChange: (value: string) => void
 }
 
@@ -35,16 +35,16 @@ function Filter({ column, onChange }: FilterProps) {
   )
 }
 
-export function ContactsTable({ contract }: { contract: TableContract }) {
+export function ProductsTable({ contract }: { contract: TableContract }) {
   const [page, setPage] = useState(EMPTY_PAGE)
-  const table = useContractTable<Contact>({ contract, data: page.rows, rowCount: page.total })
+  const table = useContractTable<Product>({ contract, data: page.rows, rowCount: page.total })
 
   // The server sorts, filters and paginates, so the table state is the query.
   // A string is a stable effect dependency; the query object is new each render.
   const query = JSON.stringify(toServerQuery(contract, table.state))
   useEffect(() => {
     let current = true
-    fetchContacts(query).then(
+    fetchProducts(query).then(
       (next) => current && setPage(next),
       (error: unknown) => console.error(error),
     )
@@ -110,7 +110,7 @@ export function ContactsTable({ contract }: { contract: TableContract }) {
           Previous
         </button>
         <span>
-          Page {pageIndex + 1} of {Math.max(table.getPageCount(), 1)} · {page.total} contacts
+          Page {pageIndex + 1} of {Math.max(table.getPageCount(), 1)} · {page.total} products
         </span>
         <button type="button" disabled={!table.getCanNextPage()} onClick={table.nextPage}>
           Next
