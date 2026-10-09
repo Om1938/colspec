@@ -1,0 +1,40 @@
+name: Bug report
+description: Something in colspec behaves incorrectly
+labels: [bug]
+body:
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      multiple: true
+      options:
+        - "@colspec/core"
+        - "@colspec/tanstack"
+        - "@colspec/react"
+        - "@colspec/server"
+        - docs or examples
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what you got instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: The smallest contract and code that shows the problem. Include any diagnostics returned.
+      render: ts
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: colspec, @tanstack/react-table or table-core, React, Node.js
+      placeholder: colspec 0.1.0, @tanstack/react-table 9.2.6, React 19.3, Node 24
+    validations:
+      required: true

@@ -43,5 +43,11 @@ pnpm --filter docs dev
 
 Dependencies point one way: `core` ← `tanstack` ← `react`, and `core` ← `server`.
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
+
 Releases use [Changesets](.changeset/README.md): run `pnpm changeset` with
 your change, and the release workflow opens a version PR and publishes on merge.
+
+## License
+
+[MIT](LICENSE)

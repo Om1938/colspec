@@ -1,0 +1,28 @@
+name: Feature request
+description: Suggest an addition or change
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The use case, and what makes it hard or impossible today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: If it touches the contract, show the JSON you would like to write.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope
+      description: colspec defines, distributes and hydrates TanStack Table definitions. UI components, data fetching and other table engines are out of scope.
+      options:
+        - label: This fits within that scope
+          required: true
