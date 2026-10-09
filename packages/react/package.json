@@ -1,6 +1,6 @@
 {
   "name": "@colspec/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "peerDependencies": {
     "@tanstack/react-table": "^9.2.6",
     "react": "^19.3.0"
