@@ -1,4 +1,6 @@
 import {
+  issuesToDiagnostics,
+  serverQuerySchema,
   toResult,
   type Diagnostic,
   type Result,
@@ -13,21 +15,29 @@ export interface ResolvedQuery<TField> {
 }
 
 /**
- * Maps client-supplied operation keys to fields the backend has approved.
- * Keys are looked up, never interpolated, so an unlisted key is rejected
- * rather than reaching a query.
+ * Validates an untrusted query and maps its operation keys to fields the
+ * backend has approved. Keys are looked up, never interpolated, so an
+ * unlisted key is rejected rather than reaching a query.
  */
 export function resolveServerQuery<TField>(
-  query: ServerQuery,
+  input: unknown,
   fields: Readonly<Record<string, TField>>,
 ): Result<ResolvedQuery<TField>> {
+  const parsed = serverQuerySchema.safeParse(input);
+  if (!parsed.success) {
+    return {
+      ok: false,
+      diagnostics: issuesToDiagnostics(parsed.error.issues, "invalid-query"),
+    };
+  }
+  const query = parsed.data;
   const diagnostics: Diagnostic[] = [];
 
   const resolve = <T extends { key: string }>(
-    entries: T[] = [],
+    entries: T[] | undefined,
     section: string,
   ) =>
-    entries.flatMap(({ key, ...rest }, index) => {
+    (entries ?? []).flatMap(({ key, ...rest }, index) => {
       if (Object.hasOwn(fields, key))
         return [{ field: fields[key] as TField, ...rest }];
       diagnostics.push({

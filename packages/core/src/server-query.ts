@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { getMode, type ContractColumn, type TableContract } from "./contract";
 
 /** The slices of table state that server-side operations depend on. */
@@ -8,11 +9,22 @@ export interface QueryState {
 }
 
 /** What the data API receives: operation keys instead of column ids. */
-export interface ServerQuery {
-  sort?: Array<{ key: string; desc: boolean }>;
-  filters?: Array<{ key: string; value: unknown }>;
-  page?: { index: number; size: number };
-}
+export const serverQuerySchema = z.strictObject({
+  sort: z
+    .array(z.strictObject({ key: z.string(), desc: z.boolean() }))
+    .optional(),
+  filters: z
+    .array(z.strictObject({ key: z.string(), value: z.unknown() }))
+    .optional(),
+  page: z
+    .strictObject({
+      index: z.number().int().nonnegative(),
+      size: z.number().int().positive(),
+    })
+    .optional(),
+});
+
+export type ServerQuery = z.infer<typeof serverQuerySchema>;
 
 type ServerKey = keyof NonNullable<ContractColumn["server"]>;
 

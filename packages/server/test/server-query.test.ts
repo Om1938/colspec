@@ -42,4 +42,14 @@ describe("resolveServerQuery", () => {
       ["sort", 1, "key"],
     ]);
   });
+
+  it("rejects input that is not a well-formed query", () => {
+    const result = resolveServerQuery(
+      { sort: [{ key: "status", desc: "yes" }] },
+      fields,
+    );
+    expect(result.diagnostics).toMatchObject([
+      { code: "invalid-query", path: ["sort", 0, "desc"] },
+    ]);
+  });
 });

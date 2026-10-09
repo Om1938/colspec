@@ -1,0 +1,70 @@
+:root {
+  font:
+    16px/1.5 system-ui,
+    sans-serif;
+  color-scheme: light dark;
+  --border: light-dark(#ddd, #444);
+  --muted: light-dark(#666, #aaa);
+}
+
+main {
+  max-width: 60rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+th,
+td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+th button {
+  all: unset;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+th button:disabled {
+  cursor: default;
+}
+
+th input,
+th select {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  box-sizing: border-box;
+}
+
+footer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1rem;
+  color: var(--muted);
+}
+
+.badge {
+  padding: 0.1rem 0.5rem;
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  background: light-dark(#e5e5e5, #333);
+}
+
+.badge-active {
+  background: light-dark(#d3f2dc, #1d4a2b);
+}
+
+pre[role='alert'] {
+  color: light-dark(#b00020, #ff8a9b);
+  white-space: pre-wrap;
+}

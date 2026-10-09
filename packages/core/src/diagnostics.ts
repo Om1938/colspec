@@ -16,6 +16,19 @@ export function hasErrors(diagnostics: ReadonlyArray<Diagnostic>): boolean {
   return diagnostics.some((diagnostic) => diagnostic.severity === "error");
 }
 
+/** Converts schema validation issues into error diagnostics under one code. */
+export function issuesToDiagnostics(
+  issues: ReadonlyArray<{ path: ReadonlyArray<PropertyKey>; message: string }>,
+  code: string,
+): Diagnostic[] {
+  return issues.map(({ path, message }) => ({
+    code,
+    severity: "error",
+    path: path.map((key) => (typeof key === "symbol" ? String(key) : key)),
+    message,
+  }));
+}
+
 /** A value is only usable when none of its diagnostics are errors. */
 export function toResult<T>(value: T, diagnostics: Diagnostic[]): Result<T> {
   return hasErrors(diagnostics)

@@ -1,5 +1,5 @@
 import { tableContractSchema, type TableContract } from "./contract";
-import { toResult, type Diagnostic, type Result } from "./diagnostics";
+import { issuesToDiagnostics, toResult, type Result } from "./diagnostics";
 import { contractRules, type ContractRule } from "./rules";
 import {
   isSupportedSchemaVersion,
@@ -48,14 +48,10 @@ export function validateContract(
   if (!parsed.success) {
     return {
       ok: false,
-      diagnostics: parsed.error.issues.map((issue): Diagnostic => ({
-        code: "invalid-structure",
-        severity: "error",
-        path: issue.path.map((key) =>
-          typeof key === "symbol" ? String(key) : key,
-        ),
-        message: issue.message,
-      })),
+      diagnostics: issuesToDiagnostics(
+        parsed.error.issues,
+        "invalid-structure",
+      ),
     };
   }
 
