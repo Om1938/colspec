@@ -1,7 +1,7 @@
 # colspec
 
 [![CI](https://github.com/Om1938/colspec/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Om1938/colspec/actions/workflows/ci.yml)
-[![Coverage](https://codecov.io/gh/Om1938/colspec/branch/main/graph/badge.svg)](https://codecov.io/gh/Om1938/colspec)
+[![Coverage](https://raw.githubusercontent.com/Om1938/colspec/badges/coverage.svg)](https://github.com/Om1938/colspec/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@colspec/core?label=npm)](https://www.npmjs.com/org/colspec)
 [![Downloads](https://img.shields.io/npm/dm/@colspec/core)](https://www.npmjs.com/package/@colspec/core)
 [![License: MIT](https://img.shields.io/npm/l/@colspec/core)](LICENSE)
